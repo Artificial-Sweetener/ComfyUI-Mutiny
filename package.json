@@ -1,0 +1,22 @@
+{
+  "name": "comfyui-mutiny",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint:js": "eslint \"web/js/**/*.js\"",
+    "format:js": "prettier --write \"web/js/**/*.js\"",
+    "format:js:check": "prettier --check \"web/js/**/*.js\"",
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "eslint": "^9.23.0",
+    "prettier": "^3.5.3",
+    "semantic-release": "^25.0.2"
+  }
+}

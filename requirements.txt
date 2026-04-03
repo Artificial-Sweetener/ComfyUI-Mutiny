@@ -1,0 +1,5 @@
+keyring
+mutiny-sdk
+Pillow
+PyYAML
+requests

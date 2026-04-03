@@ -1,0 +1,36 @@
+# Normalize line endings explicitly so Git does not rely on platform defaults.
+* text=auto
+
+# Source, config, docs, and web assets always use LF.
+*.py            text eol=lf
+*.pyi           text eol=lf
+*.toml          text eol=lf
+*.json          text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.md            text eol=lf
+*.txt           text eol=lf
+*.ini           text eol=lf
+*.cfg           text eol=lf
+*.js            text eol=lf
+*.mjs           text eol=lf
+*.cjs           text eol=lf
+*.html          text eol=lf
+*.css           text eol=lf
+*.svg           text eol=lf
+*.gitignore     text eol=lf
+*.gitattributes text eol=lf
+
+# Native Windows scripts keep CRLF.
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.ps1           text eol=crlf
+
+# Binary assets must never be normalized.
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.ico           binary
+*.pdf           binary

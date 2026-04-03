@@ -1,0 +1,48 @@
+[project]
+name = "mutiny"
+description = "Unofficial Midjourney integration for ComfyUI"
+version = "0.0.0"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+classifiers = [
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "keyring",
+    "mutiny-sdk",
+    "Pillow",
+    "PyYAML",
+    "requests",
+]
+
+[project.urls]
+Repository = "https://github.com/Artificial-Sweetener/ComfyUI-Mutiny"
+"Bug Tracker" = "https://github.com/Artificial-Sweetener/ComfyUI-Mutiny/issues"
+
+[tool.comfy]
+PublisherId = "artificialsweetener"
+DisplayName = "Mutiny"
+Icon = ""
+includes = []
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+extend-exclude = '''
+/(
+    \.git
+  | __pycache__
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = ["E501"]
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["E402"]
+"tests/settings/*.py" = ["E402", "I001"]
