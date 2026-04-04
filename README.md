@@ -131,7 +131,9 @@ If you think of those action nodes as "continue this Midjourney thing I already 
 
 ## License
 
-**ComfyUI-Mutiny** is licensed under the GNU Affero General Public License v3.0 (**AGPL-3.0**). Please read the full [LICENSE](LICENSE) included with this repo. The AGPL-3.0 is a strong copyleft license. If you convey the software, you must provide its corresponding source; and if you let users interact with a modified version over a network, you must offer them that modified version's corresponding source.
+**ComfyUI-Mutiny** is licensed under the GNU Affero General Public License v3.0 (**AGPL-3.0**). Please read the full [LICENSE](LICENSE) included with this repo.
+
+The AGPL-3.0 is a strong copyleft license. If you convey the software, you must provide its corresponding source; and if you let users interact with a modified version over a network, you must offer them that modified version's corresponding source.
 
 ## From the Developer 💖
 
