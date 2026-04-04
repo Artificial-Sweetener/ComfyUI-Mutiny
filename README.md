@@ -1,5 +1,7 @@
 # ComfyUI-Mutiny
 
+**English** | [简体中文](README.zh-CN.md)
+
 This is **ComfyUI-Mutiny**, the unofficial Midjourney integration for ComfyUI.
 
 Are you a creator with a workflow split between Discord and ComfyUI? Are you constantly dragging assets around between your Midjourney chat window or the MJ website, into your Comfy graph, and then back out again? You're a rare breed, but I've seen you in the wild and I know you're wasting a lot of time and effort on this ping-pong game.

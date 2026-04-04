@@ -1,5 +1,7 @@
 # ComfyUI-Mutiny
 
+[English](README.md) | **简体中文**
+
 这是 **ComfyUI-Mutiny**，一个面向 ComfyUI 的非官方 Midjourney 集成插件。
 
 如果你的创作流程同时依赖 Discord 和 ComfyUI，那你大概很清楚这种折腾：素材总是在 Midjourney 聊天窗口或 MJ 网站与 Comfy 工作流之间来回搬运。这样的人不算多，但我确实见过，而这种来回折返会持续浪费大量时间和精力。
