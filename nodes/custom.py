@@ -27,6 +27,7 @@ class MidjourneyCustomRequest(PromptDrivenNode):
             bind("batch"),
             bind("tile"),
             bind("seed"),
+            bind("send_explicit_seed"),
             *IMAGINE_SUBMISSION_BINDINGS,
             bind("style_references"),
             bind("character_references"),

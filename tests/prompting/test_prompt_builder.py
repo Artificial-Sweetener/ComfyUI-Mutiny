@@ -31,7 +31,7 @@ def test_custom_request_prompt_builder_fixes_version_spacing(plugin_package):
     )
 
     assert build_result.prompt_text == (
-        "cat::1.4 --v 7 --no dog::0.5 --raw --chaos 5 --repeat 2 --tile --seed 9"
+        "cat::1.4 --v 7 --no dog::0.5 --raw --chaos 5 --repeat 2 --tile"
     )
     assert build_result.build_controls["translate_weights"] is True
     assert build_result.submission_controls == {
@@ -86,7 +86,7 @@ def test_v7_prompt_builder_renders_wrapped_image_metadata(plugin_package):
 
     assert build_result.prompt_text == (
         "cat --no dog --stylize 250 --chaos 7 --weird 12 --p p123 --ar 16:9"
-        " --q 2 --exp 5 --repeat 3 --tile --seed 42 --raw --stylize 900"
+        " --q 2 --exp 5 --repeat 3 --tile --raw --stylize 900"
         " --iw 1.5 --sw 0 --sv 5 --ow 321"
     )
     assert build_result.submission_controls["images"] is wrapped_prompt_images
@@ -112,6 +112,24 @@ def test_v7_prompt_builder_renders_bare_personalization(plugin_package):
     )
 
     assert build_result.prompt_text == "cat --p"
+
+
+def test_v7_prompt_builder_sends_seed_only_when_explicitly_enabled(plugin_package):
+    """Render ``--seed`` only when the explicit seed toggle is enabled."""
+    prompting_module = sys.modules[f"{plugin_package.__name__}.prompting"]
+    node_class = plugin_package.NODE_CLASS_MAPPINGS["MidjourneyV7Request"]
+
+    build_result = prompting_module.build_prompt(
+        node_class.NODE_DEFINITION,
+        {
+            "prompt": "cat",
+            "seed": 42,
+            "send_explicit_seed": True,
+        },
+    )
+
+    assert build_result.prompt_text == "cat --seed 42"
+
 
 def test_v7_prompt_builder_rejects_conflicting_personalization_controls(
     plugin_package,
@@ -231,7 +249,7 @@ def test_niji7_prompt_builder_appends_niji7_supported_flags(plugin_package):
 
     assert build_result.prompt_text == (
         "cat --no dog --chaos 5 --weird 20 --ar 2:1"
-        " --repeat 2 --tile --seed 8 --raw --chaos 9 --sw 0 --sv 4"
+        " --repeat 2 --tile --raw --chaos 9 --sw 0 --sv 4"
     )
 
 

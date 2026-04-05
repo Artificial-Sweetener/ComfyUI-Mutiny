@@ -228,6 +228,24 @@ def test_midjourney_v7_node_submits_prompt_images_through_runtime(
     assert len(image_inputs.prompt_images) == 1
     assert image_inputs.prompt_images[0].startswith("data:image/png;base64,")
 
+
+def test_midjourney_v7_node_sends_seed_only_when_explicitly_enabled(
+    plugin_package, make_node, fake_runtime_service_factory
+):
+    """Submit ``--seed`` only when the explicit seed toggle is enabled."""
+    node_class = plugin_package.NODE_CLASS_MAPPINGS["MidjourneyV7Request"]
+    fake_runtime = fake_runtime_service_factory()
+    node = make_node(node_class, _runtime_service=fake_runtime)
+
+    node.generate(
+        prompt="cat",
+        seed=42,
+        send_explicit_seed=True,
+    )
+
+    assert fake_runtime.imagine_calls[0]["prompt_text"] == "cat --seed 42 --v 7"
+
+
 def test_niji6_node_submits_batched_images_through_runtime(
     plugin_package, make_node, fake_runtime_service_factory
 ):

@@ -92,6 +92,28 @@ def test_stylize_spec_omits_default_flag(plugin_package):
     assert renderer(250, {}) == " --stylize 250"
 
 
+def test_seed_spec_requires_explicit_send_toggle(plugin_package):
+    """Render the seed flag only when explicit seed sending is enabled."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    renderer = specs_module.INPUT_SPECS["seed"].renderer
+
+    assert renderer is not None
+    assert renderer(42, {"send_explicit_seed": False}) == ""
+    assert renderer(42, {"send_explicit_seed": True}) == " --seed 42"
+
+
+def test_send_explicit_seed_spec_declares_boolean_default(plugin_package):
+    """Expose the explicit-seed toggle with the approved UI contract."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    seed_toggle_spec = specs_module.INPUT_SPECS["send_explicit_seed"]
+
+    assert seed_toggle_spec.field_name == "send_explicit_seed"
+    assert seed_toggle_spec.field_type == "BOOLEAN"
+    assert seed_toggle_spec.field_options["default"] is False
+    assert seed_toggle_spec.field_options["label_on"] == "Send Explicit Seed"
+    assert seed_toggle_spec.field_options["label_off"] == "Send Explicit Seed"
+
+
 def test_use_raw_spec_renders_raw_mode_flag(plugin_package):
     """Render the shared Raw Mode toggle as ``--raw`` for all supported nodes."""
     specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]

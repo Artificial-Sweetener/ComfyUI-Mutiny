@@ -212,6 +212,8 @@ def _render_batch_repeat(value: Any, _: NormalizedValues) -> str:
 
 def _render_seed(value: Any, _: NormalizedValues) -> str:
     """Render the seed flag when the seed is a non-negative integer."""
+    if not _.get("send_explicit_seed"):
+        return ""
     coerced_value = coerce_int(value)
     return (
         f" --seed {value}" if coerced_value is not None and coerced_value >= 0 else ""
@@ -455,10 +457,30 @@ INPUT_SPECS: dict[str, InputSpec] = {
             "min": 0,
             "max": 4294967295,
             "step": 1,
-            "tooltip": "Random seed for reproducibility (--seed)",
+            "tooltip": (
+                "Optional Midjourney seed value. Midjourney randomizes by "
+                'default when no seed is sent. Enable "Send Explicit Seed" to '
+                "include this value as --seed."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
         renderer=_render_seed,
+    ),
+    "send_explicit_seed": InputSpec(
+        key="send_explicit_seed",
+        field_name="send_explicit_seed",
+        field_type="BOOLEAN",
+        field_options={
+            "default": False,
+            "label_on": "Send Explicit Seed",
+            "label_off": "Send Explicit Seed",
+            "tooltip": (
+                "When enabled, Mutiny sends the Seed value to Midjourney as "
+                "--seed. Leave disabled to use Midjourney's default randomized "
+                "seed behavior."
+            ),
+        },
+        role=InputRole.PROMPT_FLAG,
     ),
     "use_raw": InputSpec(
         key="use_raw",
