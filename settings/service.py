@@ -101,7 +101,6 @@ class SettingsService:
             token_provider=self.create_token_provider(),
             guild_id=settings.discord.guild_id,
             channel_id=settings.discord.channel_id,
-            user_agent=settings.discord.user_agent,
             api_endpoint=settings.discord.api_endpoint,
             cache=self._build_mutiny_cache_config(settings),
             execution={
@@ -210,7 +209,7 @@ class SettingsService:
             self._assert_known_keys(
                 section_name,
                 section_value,
-                {"guild_id", "channel_id", "user_agent", "api_endpoint"},
+                {"guild_id", "channel_id", "api_endpoint"},
             )
             normalized = {}
             if "guild_id" in section_value:
@@ -220,11 +219,6 @@ class SettingsService:
             if "channel_id" in section_value:
                 normalized["channel_id"] = self._normalize_string(
                     section_value["channel_id"]
-                )
-            if "user_agent" in section_value:
-                normalized["user_agent"] = self._normalize_optional_string(
-                    section_value["user_agent"],
-                    default_value=PluginSettings().discord.user_agent,
                 )
             if "api_endpoint" in section_value:
                 normalized["api_endpoint"] = self._normalize_optional_string(

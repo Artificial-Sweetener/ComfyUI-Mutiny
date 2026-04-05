@@ -215,6 +215,16 @@ def test_service_reports_unknown_settings_sections(tmp_path):
         service.save_settings({"unknown": {}})
 
 
+def test_service_rejects_removed_user_agent_override_payloads(tmp_path):
+    """Reject removed user-agent overrides instead of silently persisting them."""
+    service, _token_store = build_service(tmp_path)
+
+    with pytest.raises(
+        SettingsValidationError, match="Unknown discord keys: user_agent"
+    ):
+        service.save_settings({"discord": {"user_agent": "legacy-agent"}})
+
+
 def test_service_persists_migration_completion_when_no_legacy_files_exist(tmp_path):
     """Mark migration complete even when there is nothing to import."""
     service, _token_store = build_service(tmp_path)

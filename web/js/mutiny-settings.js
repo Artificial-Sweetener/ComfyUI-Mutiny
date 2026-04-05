@@ -200,7 +200,6 @@ function createDefaultSnapshot() {
             guildId: "",
             channelId: "",
             tokenConfigured: false,
-            userAgent: "",
             apiEndpoint: "",
         },
         cache: {
@@ -229,7 +228,6 @@ function normalizeSettingsStatus(payload = {}) {
             guildId: discord.guild_id || "",
             channelId: discord.channel_id || "",
             tokenConfigured: Boolean(payload.token_configured),
-            userAgent: discord.user_agent || "",
             apiEndpoint: discord.api_endpoint || "",
         },
         cache: {
@@ -1873,17 +1871,6 @@ const TEXT_ROW_DEFINITIONS = [
         formatValue: (value) => String(value || ""),
         parseValue: (value) => value,
         buildPayload: (value) => ({ discord: { channel_id: value } }),
-    },
-    {
-        id: "Mutiny.Discord.UserAgent",
-        name: "User Agent",
-        section: "discord",
-        tooltip: "Override the Discord HTTP user agent when needed.",
-        sortOrder: 370,
-        readValue: (snapshot) => snapshot.discord.userAgent,
-        formatValue: (value) => String(value || ""),
-        parseValue: (value) => value,
-        buildPayload: (value) => ({ discord: { user_agent: value } }),
     },
     {
         id: "Mutiny.Discord.ApiEndpoint",

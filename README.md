@@ -58,7 +58,7 @@ Open ComfyUI Settings and look for the **Mutiny** section. From there, configure
 - **Discord Token**: The private account credential Discord uses to identify   
   and authenticate your logged-in session. **This is effecitvely your username and password rolled into one**. Mutiny saves the supplied token into your operating system's secure credential storage.
 > This project does **not** provide instructions for obtaining your Discord token, and you should read the disclaimer above before deciding whether to use one with Mutiny.
-- **User Agent** and **API Endpoint**: Optional overrides for advanced cases. You can probably leave these alone.
+- **API Endpoint**: Optional advanced override. You can probably leave this alone.
 - **Artifact Cache RAM** and **Artifact Disk**: Control how much context Mutiny keeps around for recognizing earlier Midjourney outputs.
 - **Task Timeout Minutes**: Controls how long ComfyUI waits before a running job times out.
 

@@ -5,9 +5,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field, fields, is_dataclass, replace
 from typing import Any, Mapping, MutableMapping
 
-_DEFAULT_USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0"
-)
 _DEFAULT_API_ENDPOINT = "https://discord.com/api/v9"
 
 
@@ -22,11 +19,10 @@ class SettingsMetadata:
 
 @dataclass(frozen=True)
 class DiscordSettings:
-    """Store Discord identifiers and optional transport metadata."""
+    """Store Discord identifiers and optional API endpoint override."""
 
     guild_id: str = ""
     channel_id: str = ""
-    user_agent: str = _DEFAULT_USER_AGENT
     api_endpoint: str = _DEFAULT_API_ENDPOINT
 
 
@@ -64,7 +60,7 @@ class PluginSettings:
     @classmethod
     def from_dict(cls, data: Mapping[str, Any] | None) -> "PluginSettings":
         """Build a validated settings snapshot from persisted JSON data."""
-        payload = data or {}
+        payload = _drop_removed_settings_keys(data or {})
         return cls(
             metadata=_coerce_section(
                 SettingsMetadata, payload.get("metadata"), "metadata"
@@ -89,6 +85,17 @@ class PluginSettings:
             current = getattr(self, key)
             applied[key] = _merge_dataclass(current, value, key)
         return replace(self, **applied)
+
+
+def _drop_removed_settings_keys(data: Mapping[str, Any]) -> dict[str, Any]:
+    """Return persisted settings with known removed keys stripped out."""
+    payload = dict(data)
+    discord = payload.get("discord")
+    if isinstance(discord, Mapping) and "user_agent" in discord:
+        payload["discord"] = {
+            key: value for key, value in discord.items() if key != "user_agent"
+        }
+    return payload
 
 
 def _coerce_section(section_cls, value: Any, label: str):

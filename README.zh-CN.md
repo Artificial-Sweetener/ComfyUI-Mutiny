@@ -57,7 +57,7 @@ ComfyUI-Mutiny 在正式起航之前需要做一点配置。
 - **Channel ID**：Mutiny 应该提交任务所使用的 Discord 频道。
 - **Discord Token**：Discord 用来识别并验证你当前登录会话的私密账户凭据。**这实际上等同于把你的用户名和密码合并成一个值**。Mutiny 会把你提供的 token 保存到操作系统的安全凭据存储中。
 > 本项目**不会**提供如何获取 Discord token 的说明。在决定是否将 token 与 Mutiny 一起使用之前，请先阅读上面的免责声明。
-- **User Agent** 和 **API Endpoint**：面向高级场景的可选覆盖项。大多数情况下你可以保持默认。
+- **API Endpoint**：面向高级场景的可选覆盖项。大多数情况下你可以保持默认。
 - **Artifact Cache RAM** 和 **Artifact Disk**：控制 Mutiny 为识别先前 Midjourney 输出而保留多少上下文。
 - **Task Timeout Minutes**：控制 ComfyUI 在运行中的任务超时之前等待多久。
 
