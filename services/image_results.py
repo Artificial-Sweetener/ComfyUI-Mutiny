@@ -9,11 +9,12 @@ from typing import TYPE_CHECKING, Sequence
 import numpy as np
 import requests
 import torch
-from mutiny import Config, ImageTile
 from PIL import Image, UnidentifiedImageError
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+
+from mutiny import Config, ImageTile
 
 if TYPE_CHECKING:
     from ..runtime.models import RuntimeJobResult

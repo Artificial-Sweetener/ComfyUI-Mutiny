@@ -7,10 +7,11 @@ from pathlib import Path
 
 import requests
 from comfy_api.latest import InputImpl
-from mutiny import Config
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+
+from mutiny import Config
 
 
 class VideoFetchError(RuntimeError):

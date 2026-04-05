@@ -134,7 +134,10 @@ def test_settings_ui_uses_native_grouped_mutiny_rows():
     assert "Mutiny does not explain how to obtain your Discord token" in settings_script
     assert "installMutinySetupFailureDialog" in settings_script
     assert "Mutiny Setup Required" in settings_script
-    assert "Add your Guild ID and Channel ID in ComfyUI Settings under Mutiny." in settings_script
+    assert (
+        "Add your Guild ID and Channel ID in ComfyUI Settings under Mutiny."
+        in settings_script
+    )
     assert 'createButton("Open Setup Guide"' in settings_script
     assert "Mutiny needs your Discord guild ID before it can run." in settings_script
     assert "Mutiny needs your Discord channel ID before it can run." in settings_script
