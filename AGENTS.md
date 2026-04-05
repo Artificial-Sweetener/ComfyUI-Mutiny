@@ -14,6 +14,13 @@ Engineering priority is behavior safety, clean refactors, strong observability, 
 ## Environment and Command Execution
 
 - Use the Python environment that hosts this ComfyUI instance
+- For machine-agnostic Python verification work such as `pytest`, `ruff format`, and `ruff check`, invoke tools through the ComfyUI host environment's Python interpreter rather than an unrelated global interpreter
+- From this repository root, the ComfyUI base directory is two levels up. Use the host venv interpreter under that base directory for verification commands
+- When running this repo's tests against the host environment, launch pytest from the ComfyUI base directory and target this repo's tests by path so imports resolve the installed `mutiny` SDK instead of the plugin package directory
+- Example shape:
+  - use the Python interpreter from the ComfyUI base directory's `venv`
+  - run `pytest` from the ComfyUI base directory
+  - point `pytest` at this repo's `tests` directory and `pytest.ini`
 
 ## Core Engineering Principles
 
@@ -117,6 +124,7 @@ Engineering priority is behavior safety, clean refactors, strong observability, 
 - Formatter: `ruff format`
 - Linter: `ruff check`
 - Test runner: `pytest`
+- Run Python toolchain commands from the ComfyUI host environment when the check is machine-agnostic
 
 ## JavaScript Toolchain
 
