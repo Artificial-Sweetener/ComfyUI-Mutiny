@@ -1,5 +1,5 @@
 keyring
-mutiny-sdk
+mutiny-sdk>=1.1.0
 Pillow
 PyYAML
 requests
