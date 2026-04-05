@@ -16,3 +16,4 @@ mutiny.settings.json
 
 # JavaScript tooling
 node_modules/
+.tracking
