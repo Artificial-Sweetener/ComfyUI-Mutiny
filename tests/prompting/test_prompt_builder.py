@@ -31,8 +31,7 @@ def test_custom_request_prompt_builder_fixes_version_spacing(plugin_package):
     )
 
     assert build_result.prompt_text == (
-        "cat::1.4 --v 7 --no dog::0.5 --stylize 100 --raw --chaos 5 --ar 1:1"
-        " --repeat 2 --tile --seed 9"
+        "cat::1.4 --v 7 --no dog::0.5 --raw --chaos 5 --repeat 2 --tile --seed 9"
     )
     assert build_result.build_controls["translate_weights"] is True
     assert build_result.submission_controls == {
@@ -112,8 +111,7 @@ def test_v7_prompt_builder_renders_bare_personalization(plugin_package):
         },
     )
 
-    assert build_result.prompt_text == "cat --p --q 1"
-
+    assert build_result.prompt_text == "cat --p"
 
 def test_v7_prompt_builder_rejects_conflicting_personalization_controls(
     plugin_package,
@@ -148,6 +146,7 @@ def test_v7_prompt_builder_skips_image_weight_for_plain_images(plugin_package):
     )
 
     assert "--iw" not in build_result.prompt_text
+    assert "--q" not in build_result.prompt_text
     assert build_result.submission_controls["images"] is not None
 
 
@@ -167,6 +166,7 @@ def test_v7_prompt_builder_allows_manual_reference_flags_in_custom_args(plugin_p
 
     assert "--sref https://example.invalid/style.png" in build_result.prompt_text
     assert "--oref https://example.invalid/subject.png" in build_result.prompt_text
+    assert "--q" not in build_result.prompt_text
 
 
 def test_v7_prompt_builder_rejects_omni_reference_with_draft_or_ultra_quality(
@@ -230,7 +230,7 @@ def test_niji7_prompt_builder_appends_niji7_supported_flags(plugin_package):
     )
 
     assert build_result.prompt_text == (
-        "cat --no dog --stylize 100 --chaos 5 --weird 20 --ar 2:1"
+        "cat --no dog --chaos 5 --weird 20 --ar 2:1"
         " --repeat 2 --tile --seed 8 --raw --chaos 9 --sw 0 --sv 4"
     )
 
@@ -262,6 +262,7 @@ def test_batch_prompt_builder_maps_total_images_to_repeat_flags(
     )
 
     assert build_result.values["batch"] in {4, 8, 12, 160}
+    assert "--q" not in build_result.prompt_text
     if expected_fragment:
         assert expected_fragment in build_result.prompt_text
     else:

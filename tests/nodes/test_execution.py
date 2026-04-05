@@ -222,12 +222,11 @@ def test_midjourney_v7_node_submits_prompt_images_through_runtime(
         images=wrapped_images,
     )
 
-    assert fake_runtime.imagine_calls[0]["prompt_text"] == "cat --q 1 --iw 2 --v 7"
+    assert fake_runtime.imagine_calls[0]["prompt_text"] == "cat --iw 2 --v 7"
     image_inputs = fake_runtime.imagine_calls[0]["image_inputs"]
     assert image_inputs is not None
     assert len(image_inputs.prompt_images) == 1
     assert image_inputs.prompt_images[0].startswith("data:image/png;base64,")
-
 
 def test_niji6_node_submits_batched_images_through_runtime(
     plugin_package, make_node, fake_runtime_service_factory

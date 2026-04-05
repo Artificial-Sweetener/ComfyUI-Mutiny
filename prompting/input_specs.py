@@ -128,7 +128,10 @@ def _render_version(value: Any, _: NormalizedValues) -> str:
 
 def _render_stylize(value: Any, _: NormalizedValues) -> str:
     """Render the long-form stylize flag when a non-zero value is present."""
-    return f" --stylize {value}" if coerce_int(value) else ""
+    coerced_value = coerce_int(value)
+    if coerced_value in (None, 0, 100):
+        return ""
+    return f" --stylize {coerced_value}"
 
 
 def _render_short_stylize(value: Any, _: NormalizedValues) -> str:
@@ -153,35 +156,45 @@ def _render_weird(value: Any, _: NormalizedValues) -> str:
 
 def _render_quality(value: Any, _: NormalizedValues) -> str:
     """Render the current shared quality selector into Midjourney flags."""
-    values_by_label = {
-        "Draft Quality": "0.5",
-        "Default Quality": "1",
-        "High Quality": "2",
-    }
-    return f" --q {values_by_label.get(value, '1')}"
+    if value in (None, "", "Default Quality"):
+        return ""
+    if value == "Draft Quality":
+        return " --q 0.5"
+    if value == "High Quality":
+        return " --q 2"
+    return ""
 
 
 def _render_legacy_quality(value: Any, _: NormalizedValues) -> str:
     """Render the legacy quality selector used by older model families."""
-    values_by_label = {
-        "Bad Quality": "0.25",
-        "Draft Quality": "0.5",
-        "Default Quality": "1",
-    }
-    return f" --q {values_by_label.get(value, '1')}"
+    if value in (None, "", "Default Quality"):
+        return ""
+    if value == "Bad Quality":
+        return " --q 0.25"
+    if value == "Draft Quality":
+        return " --q 0.5"
+    return ""
 
 
 def _render_v7_quality(value: Any, _: NormalizedValues) -> str:
     """Render the Midjourney v7 quality selector into prompt flags."""
+    if value in (None, "", "Default Quality"):
+        return ""
     if value == "Draft Quality":
         return " --draft"
+    if value == "High Quality":
+        return " --q 2"
+    if value == "Ultra Quality":
+        return " --q 4"
+    return ""
 
-    values_by_label = {
-        "Default Quality": "1",
-        "High Quality": "2",
-        "Ultra Quality": "4",
-    }
-    return f" --q {values_by_label.get(value, '1')}"
+
+def _render_aspect_ratio(value: Any, _: NormalizedValues) -> str:
+    """Render a non-default aspect ratio while leaving the default implicit."""
+    normalized_value = str(value or "").strip()
+    if not normalized_value or normalized_value == "1:1":
+        return ""
+    return f" --ar {normalized_value}"
 
 
 def _normalize_batch_count(value: Any, _: NormalizedValues) -> int:
@@ -287,7 +300,11 @@ INPUT_SPECS: dict[str, InputSpec] = {
             "min": 0,
             "max": 1000,
             "step": 1,
-            "tooltip": "Controls the strength of Midjourney’s learned aesthetic priors - higher adds more artistic, less literal details. (--stylize)",
+            "tooltip": (
+                "Controls the strength of Midjourney’s learned aesthetic priors - "
+                "higher adds more artistic, less literal details. Default 100 is "
+                "implicit; non-default values render --stylize."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
         renderer=_render_stylize,
@@ -326,10 +343,13 @@ INPUT_SPECS: dict[str, InputSpec] = {
         field_type="STRING",
         field_options={
             "default": "1:1",
-            "tooltip": "Aspect ratio (W:H), e.g., 16:9, 4:3, etc (--ar)",
+            "tooltip": (
+                "Aspect ratio (W:H), e.g., 16:9 or 4:3. Default 1:1 is implicit; "
+                "non-default ratios render --ar."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
-        renderer=_render_flag("--ar"),
+        renderer=_render_aspect_ratio,
         normalizer=_normalize_ratio_field,
     ),
     "niji_aspect_ratio": InputSpec(
@@ -338,10 +358,13 @@ INPUT_SPECS: dict[str, InputSpec] = {
         field_type="STRING",
         field_options={
             "default": "1:1",
-            "tooltip": "Aspect ratio (W:H) between 1:2 and 2:1, e.g., 2:3, 3:2, 1:1. Used for Niji, MJ v4c, etc. (--ar)",
+            "tooltip": (
+                "Aspect ratio (W:H) between 1:2 and 2:1, e.g., 2:3, 3:2, 1:1. "
+                "Default 1:1 is implicit; non-default ratios render --ar."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
-        renderer=_render_flag("--ar"),
+        renderer=_render_aspect_ratio,
         normalizer=_normalize_ratio_field,
         validator=_validate_v4c_ratio,
     ),
@@ -351,7 +374,10 @@ INPUT_SPECS: dict[str, InputSpec] = {
         field_type=["Draft Quality", "Default Quality", "High Quality"],
         field_options={
             "default": "Default Quality",
-            "tooltip": "Draft (--q 0.5), Default (--q 1), High (--q 2). Not all models support every value.",
+            "tooltip": (
+                "Draft renders --q 0.5, Default is implicit, High renders --q 2. "
+                "Not all models support every value."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
         renderer=_render_quality,
@@ -366,7 +392,7 @@ INPUT_SPECS: dict[str, InputSpec] = {
                 "Controls generation speed and detail for legacy MJ models (v1–v5, Niji 5, etc). "
                 "Bad Quality (--q 0.25): Fastest/lowest detail. "
                 "Draft Quality (--q 0.5): Lower quality, faster/cheaper. "
-                "Default Quality (--q 1): Normal quality (default). "
+                "Default Quality: Normal implicit quality. "
                 "Higher values are NOT supported."
             ),
         },
@@ -384,7 +410,10 @@ INPUT_SPECS: dict[str, InputSpec] = {
         ],
         field_options={
             "default": "Default Quality",
-            "tooltip": "Draft Quality (--draft), Default (--q 1), High (--q 2), Ultra (--q 4, v7 only).",
+            "tooltip": (
+                "Draft Quality renders --draft, Default Quality is implicit, "
+                "High renders --q 2, Ultra renders --q 4 (v7 only)."
+            ),
         },
         role=InputRole.PROMPT_FLAG,
         renderer=_render_v7_quality,

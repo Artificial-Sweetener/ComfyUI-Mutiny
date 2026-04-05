@@ -40,9 +40,56 @@ def test_v7_quality_spec_maps_expected_flags(plugin_package):
 
     assert renderer is not None
     assert renderer("Draft Quality", {}) == " --draft"
-    assert renderer("Default Quality", {}) == " --q 1"
+    assert renderer("Default Quality", {}) == ""
     assert renderer("High Quality", {}) == " --q 2"
     assert renderer("Ultra Quality", {}) == " --q 4"
+
+
+def test_shared_quality_spec_omits_default_flag(plugin_package):
+    """Leave the shared default quality implicit while keeping explicit variants."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    renderer = specs_module.INPUT_SPECS["quality"].renderer
+
+    assert renderer is not None
+    assert renderer("Draft Quality", {}) == " --q 0.5"
+    assert renderer("Default Quality", {}) == ""
+    assert renderer("High Quality", {}) == " --q 2"
+
+
+def test_legacy_quality_spec_omits_default_flag(plugin_package):
+    """Leave the legacy default quality implicit while preserving old variants."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    renderer = specs_module.INPUT_SPECS["quality_legacy"].renderer
+
+    assert renderer is not None
+    assert renderer("Bad Quality", {}) == " --q 0.25"
+    assert renderer("Draft Quality", {}) == " --q 0.5"
+    assert renderer("Default Quality", {}) == ""
+
+
+def test_aspect_ratio_specs_omit_default_ratio_flag(plugin_package):
+    """Render only non-default aspect-ratio flags across shared selectors."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    shared_renderer = specs_module.INPUT_SPECS["aspect_ratio"].renderer
+    niji_renderer = specs_module.INPUT_SPECS["niji_aspect_ratio"].renderer
+
+    assert shared_renderer is not None
+    assert niji_renderer is not None
+    assert shared_renderer("1:1", {}) == ""
+    assert shared_renderer("16:9", {}) == " --ar 16:9"
+    assert niji_renderer("1:1", {}) == ""
+    assert niji_renderer("2:1", {}) == " --ar 2:1"
+
+
+def test_stylize_spec_omits_default_flag(plugin_package):
+    """Render only non-default long-form stylize values."""
+    specs_module = sys.modules[f"{plugin_package.__name__}.prompting.input_specs"]
+    renderer = specs_module.INPUT_SPECS["stylize"].renderer
+
+    assert renderer is not None
+    assert renderer(0, {}) == ""
+    assert renderer(100, {}) == ""
+    assert renderer(250, {}) == " --stylize 250"
 
 
 def test_use_raw_spec_renders_raw_mode_flag(plugin_package):
