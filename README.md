@@ -1,5 +1,7 @@
 # ComfyUI-Mutiny
 
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE) [![Comfy Registry](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.comfy.org%2Fnodes%2Fmutiny&query=%24.latest_version.version&label=Comfy%20Registry&color=5b5bd6)](https://registry.comfy.org/publishers/artificialsweetener/nodes/mutiny) [![Comfy Registry downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.comfy.org%2Fnodes%2Fmutiny&query=%24.downloads&label=downloads&color=5b5bd6)](https://registry.comfy.org/publishers/artificialsweetener/nodes/mutiny) [![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
+
 **English** | [简体中文](README.zh-CN.md)
 
 This is **ComfyUI-Mutiny**, the unofficial Midjourney integration for ComfyUI.
